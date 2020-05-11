@@ -158,6 +158,7 @@ storage:
             quay.io/kinvolk/bootkube:v0.14.0-helm-amd64 \
             --net=host \
             --dns=host \
+            --hosts-entry=host \
             --exec=/bootkube -- start --asset-dir=/assets "$@"
 passwd:
   users:
