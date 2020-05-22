@@ -59,6 +59,9 @@ type workerPool struct {
 	SetupRaidHDD          bool              `hcl:"setup_raid_hdd,optional"`
 	SetupRaidSSD          bool              `hcl:"setup_raid_ssd,optional"`
 	SetupRaidSSDFS        bool              `hcl:"setup_raid_ssd_fs,optional"`
+	CLCSnippets           []string          `hcl:"clc_snippets,optional"`
+	SSHPubKeys            []string          `hcl:"ssh_pubkeys,optional"`
+	Tags                  map[string]string `hcl:"tags,optional"`
 	NodesDependOn         []string          // Not exposed to the user
 }
 

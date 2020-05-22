@@ -121,10 +121,33 @@ module "worker-{{ $pool.Name }}" {
     packet   = packet.default
   }
 
-  ssh_keys  = {{$.SSHPublicKeys}}
+  {{- if $pool.SSHPubKeys }}
+  ssh_keys = [
+      {{- range $pool.SSHPubKeys }}
+      "{{ . }}",
+      {{- end }}
+  ]
+  {{- end }}
+
+  {{- if $pool.CLCSnippets }}
+  clc_snippets = [
+      {{- range $pool.CLCSnippets }}
+      "{{ . }}",
+      {{- end }}
+  ]
+  {{- end }}
+
 
   cluster_name = "{{$.Config.ClusterName}}"
-  tags         = {{$.Tags}}
+
+  {{- if $pool.Tags }}
+  tags = [
+      {{- range $key, $value := $pool.Tags }}
+      "{{ $key }}:{{ $value }}",
+      {{- end }}
+	]
+  {{- end }}
+
   project_id   = "{{$.Config.ProjectID}}"
   facility     = "{{$.Config.Facility}}"
   {{- if $.Config.ClusterDomainSuffix }}
