@@ -84,6 +84,14 @@ module "packet-{{.Config.ClusterName}}" {
   }
   {{- end }}
 
+  {{- if .Config.ControllerCLCSnippets }}
+  controller_clc_snippets = [
+      {{- range .Config.ControllerCLCSnippets }}
+      "{{ . }}",
+      {{- end }}
+  ]
+  {{- end }}
+
   {{- if .Config.ReservationIDsDefault }}
   reservation_ids_default = "{{.Config.ReservationIDsDefault}}"
   {{- end }}
