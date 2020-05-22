@@ -202,7 +202,11 @@ func createTerraformConfigFile(cfg *config, terraformPath string) error {
 	if err != nil {
 		return errors.Wrapf(err, "failed to marshal management CIDRs")
 	}
-
+	// If not provided, then inherit values of SSHKeys, Tags and CLCSnippets for
+	// worker pools from those provided for the controller.
+	for i, wp := range cfg.WorkerPools {
+		cfg.WorkerPools[i] = wp.withInheritedValuesFromConfig(cfg)
+	}
 	// Packet does not accept tags as a key-value map but as an array of
 	// strings.
 	util.AppendTags(&cfg.Tags)
@@ -527,4 +531,23 @@ func checkResFormat(reservationIDs map[string]string, name, errorPrefix, resPref
 	}
 
 	return diagnostics
+}
+
+func (wp *workerPool) withInheritedValuesFromConfig(c *config) workerPool {
+	// Preserve user provided values for worker pool.
+	workerpool := *wp
+
+	if len(wp.SSHPubKeys) == 0 {
+		workerpool.SSHPubKeys = c.SSHPubKeys
+	}
+
+	if len(wp.CLCSnippets) == 0 {
+		workerpool.CLCSnippets = c.ControllerCLCSnippets
+	}
+
+	if len(wp.Tags) == 0 {
+		workerpool.Tags = c.Tags
+	}
+
+	return workerpool
 }

@@ -260,3 +260,38 @@ func cmpSliceString(a, b []string) bool {
 
 	return true
 }
+
+func TestInheritedValuesForWorkerPool(t *testing.T) {
+	controllerSSHKey := "controller-ssh-key"
+	controllerCLC := "controller-clc"
+	cfg := &config{
+		SSHPubKeys:            []string{controllerSSHKey},
+		ControllerCLCSnippets: []string{controllerCLC},
+		Tags: map[string]string{
+			"foo": "bar",
+		},
+		WorkerPools: []workerPool{
+			// Inherit SSHPubKeys, CLCSnippets and Tags from config.
+			{},
+		},
+	}
+
+	for i, wp := range cfg.WorkerPools {
+		cfg.WorkerPools[i] = wp.withInheritedValuesFromConfig(cfg)
+	}
+
+	// Test if fields were inherited correctly or not.
+	for _, wp := range cfg.WorkerPools {
+		if len(wp.SSHPubKeys) != 1 && wp.SSHPubKeys[0] != controllerSSHKey {
+			t.Fatalf("expected ssh key '%s', got: '%s'", controllerSSHKey, wp.SSHPubKeys)
+		}
+
+		if len(wp.CLCSnippets) != 1 && wp.CLCSnippets[0] != controllerCLC {
+			t.Fatalf("expected clc '%s', got: '%s'", controllerCLC, wp.CLCSnippets)
+		}
+
+		if len(wp.Tags) != 1 && wp.Tags["foo"] != "bar" {
+			t.Fatalf("expected value 'bar', got: '%s'", wp.Tags["foo"])
+		}
+	}
+}
