@@ -35,6 +35,7 @@ variable "cluster_name" {}
 variable "controllers_count" {}
 variable "workers_count" {}
 variable "controller_type" {}
+variable "controller_clc_snippet" {}
 variable "workers_type" {}
 variable "dns_zone" {}
 variable "route53_zone_id" {}
@@ -44,6 +45,8 @@ variable "management_cidrs" {}
 variable "node_private_cidr" {}
 variable "state_s3_bucket" {}
 variable "lock_dynamodb_table" {}
+variable "worker_clc_snippet" {}
+variable "worker_ssh_public_keys" {}
 
 backend "s3" {
   bucket         = var.state_s3_bucket
@@ -66,6 +69,8 @@ cluster "packet" {
   controller_count = var.controllers_count
 
   controller_type = "baremetal_0"
+
+  controller_clc_snippet = var.controller_clc_snippet
 
   facility = var.facility
 
@@ -124,6 +129,14 @@ cluster "packet" {
 
   worker_pool "worker-pool-1" {
     count = var.workers_count
+
+    clc_snippet = var.worker_clc_snippet
+
+    ssh_pubkeys = var.worker_ssh_public_keys
+
+    tags = {
+      "pool" : "storage"
+    }
 
     ipxe_script_url = ""
 
@@ -185,6 +198,7 @@ node_type = var.custom_default_worker_type
 | `tags`                                | List of tags that will be propagated to master nodes.                                                                                                                         | -               | false    |
 | `controller_count`                    | Number of controller nodes.                                                                                                                                                   | 1               | false    |
 | `controller_type`                     | Packet instance type for controllers.                                                                                                                                         | "baremetal_0"   | false    |
+| `controller_clc_snippets`             | Controller Flatcar Container Linux Config snippets.                                                                                                                           | []              | false    |
 | `dns`                                 | DNS configuration block.                                                                                                                                                      | -               | true     |
 | `dns.zone`                            | DNS Zone.                                                                                                                                                                     | -               | true     |
 | `dns.provider`                        | DNS Provider configuration block. Route 53 or Manual.                                                                                                                         | -               | true     |
@@ -212,6 +226,9 @@ node_type = var.custom_default_worker_type
 | `certs_validity_period_hours`         | Validity of all the certificates in hours.                                                                                                                                    | 8760            | false    |
 | `worker_pool`                         | Configuration block for worker pools. There can be more than one.                                                                                                             | -               | true     |
 | `worker_pool.count`                   | Number of workers in the worker pool. Can be changed afterwards to add or delete workers.                                                                                     | 1               | true     |
+| `worker_pool.ssh_pubkeys`             | Optional list of SSH public keys for user `core`. If not provided then SSH public keys provided for controllers will be used for the worker pool.                             | []              | false    |
+| `worker_pool.clc_snippets`            | Worker Flatcar Container Linux Config snippets. If not provided then CLC Snippets provided for controllers will be used for the worker pool.                                  | []              | false    |
+| `worker_pool.tags`                    | Optional list of tags that will be propagated to nodes in the worker pool. If not provided then Tags for master nodes will be used for the worker pool.                       | -               | false    |
 | `worker_pool.disable_bgp`             | Disable BGP on nodes. Nodes won't be able to connect to Packet BGP peers.                                                                                                     | false           | false    |
 | `worker_pool.ipxe_script_url`         | Boot via iPXE. Required for arm64.                                                                                                                                            | -               | false    |
 | `worker_pool.os_arch`                 | Flatcar Container Linux architecture to install (amd64, arm64).                                                                                                               | "amd64"         | false    |
