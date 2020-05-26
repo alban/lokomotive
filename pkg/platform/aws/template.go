@@ -30,6 +30,7 @@ module "aws-{{.Config.ClusterName}}" {
   tags         = {{.Tags}}
   dns_zone     = "{{.Config.DNSZone}}"
   dns_zone_id  = "{{.Config.DNSZoneID}}"
+  set_csi_driver_iam_role = {{.Config.SetCSIDriverIAMRole}}
   {{- if .Config.ClusterDomainSuffix }}
   cluster_domain_suffix = "{{.Config.ClusterDomainSuffix}}"
   {{- end }}

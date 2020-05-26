@@ -92,6 +92,12 @@ variable "tags" {
   description = "Optional details to tag on AWS resources"
 }
 
+variable "set_csi_driver_iam_role" {
+  type        = bool
+  default     = false
+  description = "Set up IAM role needed for dynamic volumes provisioning to work on AWS"
+}
+
 # configuration
 
 variable "ssh_keys" {

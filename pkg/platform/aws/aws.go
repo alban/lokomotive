@@ -74,6 +74,7 @@ type config struct {
 	HostCIDR                 string            `hcl:"host_cidr,optional"`
 	PodCIDR                  string            `hcl:"pod_cidr,optional"`
 	ServiceCIDR              string            `hcl:"service_cidr,optional"`
+	SetCSIDriverIAMRole      bool              `hcl:"set_csi_driver_iam_role,optional"`
 	ClusterDomainSuffix      string            `hcl:"cluster_domain_suffix,optional"`
 	EnableReporting          bool              `hcl:"enable_reporting,optional"`
 	CertsValidityPeriodHours int               `hcl:"certs_validity_period_hours,optional"`
