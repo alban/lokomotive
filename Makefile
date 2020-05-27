@@ -60,10 +60,12 @@ build-slim:
 test: run-unit-tests
 
 .PHONY: lint
+lint: diffnoprefix := $(shell sh -c "git config --get --show-origin diff.noprefix | awk '/file:\.git\/config\s+\S+/ {print \$$2}'")
 lint: build-slim build-test
-	# Note: Make sure that you run `git config diff.noprefix false` in this repo
-	# See this issue for more details: https://github.com/golangci/golangci-lint/issues/948
+	# A workaround for https://github.com/golangci/golangci-lint/issues/948.
+	git config --replace-all diff.noprefix false
 	golangci-lint run --enable-all --disable=godox,gochecknoglobals,goerr113 --max-same-issues=0 --max-issues-per-linter=0 --build-tags $(ALL_BUILD_TAGS) --new-from-rev=$$(git merge-base $$(cat .git/resource/base_sha 2>/dev/null || echo "origin/master") HEAD) --modules-download-mode=$(MOD) --timeout=5m --exclude-use-default=false ./...
+	if [ -z "$(diffnoprefix)" ]; then git config --unset diff.noprefix; else git config --replace-all diff.noprefix $(diffnoprefix); fi
 
 .PHONY: lint-docker
 lint-docker:
