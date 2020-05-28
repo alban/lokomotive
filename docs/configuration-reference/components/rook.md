@@ -8,6 +8,7 @@
 * [Attribute reference](#attribute-reference)
 * [Applying](#applying)
 * [Deleting](#deleting)
+* [Next Steps](#next-steps)
 
 ## Introduction
 
@@ -82,3 +83,7 @@ To destroy the component:
 ```bash
 lokoctl component delete rook --delete-namespace
 ```
+
+## Next Steps
+
+- Deploy Ceph cluster using the [rook-ceph component](./rook-ceph.md).
