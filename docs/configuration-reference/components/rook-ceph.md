@@ -8,6 +8,7 @@
 * [Attribute reference](#attribute-reference)
 * [Applying](#applying)
 * [Deleting](#deleting)
+* [Next Steps](#next-steps)
 
 ## Introduction
 
@@ -98,3 +99,7 @@ lokoctl component delete rook-ceph
 
 After removing the component from the cluster, make sure to delete `/var/lib/rook` from the host
 filesystem of all worker nodes for a clean reinstallation.
+
+## Next Steps
+
+- Find out how to [access Ceph Dashboard](../../how-to-guides/access-ceph-dashboard.md).
