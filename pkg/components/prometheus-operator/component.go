@@ -122,6 +122,7 @@ func newComponent() *component {
 				"tier":    "control-plane",
 			},
 		},
+		Grafana: &Grafana{},
 	}
 }
 
