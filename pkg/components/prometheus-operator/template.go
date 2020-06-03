@@ -58,6 +58,7 @@ grafana:
     pspUseAppArmor: false
   {{ if .Grafana}}
   adminPassword: {{.Grafana.AdminPassword}}
+  envFromSecret: {{.Grafana.EnvFromSecret}}
   {{ if .Grafana.Ingress }}
   ingress:
     enabled: true

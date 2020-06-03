@@ -49,6 +49,7 @@ type CoreDNS struct {
 // Grafana object collects sub component grafana related information.
 type Grafana struct {
 	AdminPassword string         `hcl:"admin_password,optional"`
+	EnvFromSecret string         `hcl:"env_from_secret,optional"`
 	Ingress       *types.Ingress `hcl:"ingress,block"`
 }
 

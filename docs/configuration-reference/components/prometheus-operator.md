@@ -32,7 +32,8 @@ component "prometheus-operator" {
   namespace = "monitoring"
 
   grafana {
-    admin_password = "foobar"
+    admin_password  = "foobar"
+    env_from_secret = "githuboauth"
     ingress {
       host                       = "grafana.mydomain.net"
       class                      = "contour"
@@ -91,6 +92,7 @@ Example:
 |--------	|--------------|:-------:|:--------:|
 | `namespace` | Namespace to deploy the Prometheus Operator. | `monitoring` | false |
 | `grafana.admin_password` | Password for `admin` user in Grafana. If not provided it is auto generated and stored in secret `prometheus-operator-grafana`.  | - | false |
+| `grafana.env_from_secret` | Name of the secret to populate environment variables in the container. The contents of the target secret's `data` or `stringData` field will represent the key-value pairs as environment variables.  | - | false |
 | `grafana.ingress.host` | Ingress URL host to expose Grafana over the internet. **NOTE:** When running on Packet, a DNS entry pointing at the ingress controller needs to be created.  | - | true |
 | `grafana.ingress.class` | Ingress class to use for Grafana ingress. | `contour` | false |
 | `grafana.ingress.certmanager_cluster_issuer` | `ClusterIssuer` to be used by cert-manager while issuing TLS certificates. Supported values: `letsencrypt-production`, `letsencrypt-staging`.  | `letsencrypt-production` | false |
