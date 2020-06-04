@@ -41,6 +41,10 @@ cluster "packet" {
   asset_dir        = pathexpand(var.asset_dir)
   cluster_name     = var.cluster_name
   controller_count = var.controllers_count
+  os_channel       = "alpha"
+
+  //os_version       = "current"
+
 
   dns {
     provider = "route53"
@@ -56,8 +60,11 @@ cluster "packet" {
   node_private_cidr = var.node_private_cidr
 
   worker_pool "pool-1" {
-    count     = var.workers_count
-    node_type = var.workers_type
+    count      = var.workers_count
+    node_type  = var.workers_type
+    os_channel = "alpha"
+
+    //os_version = "current"
   }
 }
 

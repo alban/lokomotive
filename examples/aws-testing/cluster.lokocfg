@@ -29,11 +29,17 @@ cluster "aws" {
   dns_zone         = var.dns_zone
   dns_zone_id      = var.route53_zone_id
   ssh_pubkeys      = var.ssh_public_keys
+  os_channel       = "alpha"
+
+  //os_version       = "current"
 
   worker_pool "my-wp-name" {
     count         = var.workers_count
     instance_type = var.workers_type
     ssh_pubkeys   = var.ssh_public_keys
+    os_channel    = "alpha"
+
+    //os_version    = "current"
   }
 }
 
