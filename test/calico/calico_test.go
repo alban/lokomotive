@@ -19,6 +19,7 @@ package calico
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,7 +31,7 @@ import (
 	"github.com/kinvolk/lokomotive/test/components/util"
 )
 
-func TestHostEndpoints(t *testing.T) {
+func TestHostEndpointObjectsExistForPublicInterfacesOnAllNodes(t *testing.T) {
 	// Build rest client so we can do equivalent of 'kubectl get --raw'.
 	config, err := clientcmd.BuildConfigFromFlags("", util.KubeconfigPath(t))
 	if err != nil {
@@ -50,7 +51,8 @@ func TestHostEndpoints(t *testing.T) {
 	hostEndpoints := struct {
 		Items []struct {
 			Spec struct {
-				Node string
+				Node          string
+				InterfaceName string
 			}
 		}
 	}{}
@@ -72,7 +74,7 @@ func TestHostEndpoints(t *testing.T) {
 	endpoints := map[string]struct{}{}
 
 	for _, v := range hostEndpoints.Items {
-		endpoints[v.Spec.Node] = struct{}{}
+		endpoints[fmt.Sprintf("%s-%s", v.Spec.Node, v.Spec.InterfaceName)] = struct{}{}
 	}
 
 	cs := util.CreateKubeClient(t)
@@ -82,9 +84,11 @@ func TestHostEndpoints(t *testing.T) {
 		t.Fatalf("failed getting list of nodes in the cluster: %v", err)
 	}
 
+	expectedPublicInterfaceName := "bond0"
+
 	for _, v := range nodes.Items {
-		if _, ok := endpoints[v.Name]; !ok {
-			t.Errorf("no HostEndpoint object found for node %q", v.Name)
+		if _, ok := endpoints[fmt.Sprintf("%s-%s", v.Name, expectedPublicInterfaceName)]; !ok {
+			t.Errorf("no HostEndpoint object found for node %q with interface %q", v.Name, expectedPublicInterfaceName)
 		}
 	}
 }
