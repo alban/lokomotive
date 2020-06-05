@@ -8,6 +8,7 @@
 * [Attribute reference](#attribute-reference)
 * [Applying](#applying)
 * [Deleting](#deleting)
+* [Next steps](#next-steps)
 
 ## Introduction
 
@@ -163,3 +164,7 @@ To destroy the component:
 ```bash
 lokoctl component delete prometheus-operator --delete-namespace
 ```
+
+## Next steps
+
+- Learn [how to access monitoring stack](../../how-to-guides/access-monitoring.md) installed using above tutorial.
