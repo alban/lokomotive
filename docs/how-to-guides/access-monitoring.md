@@ -12,11 +12,11 @@
 
 ## Introduction
 
-You can deploy the monitoring stack shipped with lokomotive as shown in the prometheus-operator component [guide](../configuration-reference/components/prometheus-operator.md).
+You can deploy the monitoring stack shipped with lokomotive, as shown in the prometheus-operator component [guide](../configuration-reference/components/prometheus-operator.md).
 
 ## Prerequisites
 
-- The prometheus-operator component is deployed in `monitoring` Namespace. If you have specified a different Namespace in config then change the commands accordingly, `kubectl -n <your namespace> ...`.
+- Deploy the prometheus-operator component in `monitoring` Namespace. If you have specified a different Namespace in the config then change the commands accordingly, `kubectl -n <your namespace> ...`.
 
 ## Prometheus
 
@@ -48,13 +48,13 @@ Run the following command to port forward grafana dashboard locally on port `808
 kubectl -n monitoring port-forward svc/prometheus-operator-grafana 8080:80
 ```
 
-Obtain grafana `admin` user password by running following command:
+Obtain grafana `admin` user password by running the following command:
 
 ```
 kubectl -n monitoring get secret prometheus-operator-grafana -o jsonpath='{.data.admin-password}' | base64 -d && echo
 ```
 
-Now open the following URL: [http://localhost:8080](http://localhost:8080). Enter username `admin` and password obtained from previous step.
+Now open the following URL: [http://localhost:8080](http://localhost:8080). Enter username `admin` and password obtained from the previous step.
 
 ### Using Ingress
 
@@ -73,10 +73,10 @@ component "prometheus-operator" {
 **NOTE**: If you are running this component on Packet then make sure that you have made a DNS entry for `grafana.mydomain.com` against the Packet EIP.
 
 
-Obtain grafana `admin` user password by running following command:
+Obtain grafana `admin` user password by running the following command:
 
 ```
 kubectl -n monitoring get secret prometheus-operator-grafana -o jsonpath='{.data.admin-password}' | base64 -d && echo
 ```
 
-Now open the following URL: https://grafana.mydomain.com (replace this URL with your domain). Enter username `admin` and password obtained from previous step.
+Now open the following URL: https://grafana.mydomain.com (replace this URL with your domain). Enter username `admin` and password obtained from the previous step.
